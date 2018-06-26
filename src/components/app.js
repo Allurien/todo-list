@@ -1,4 +1,4 @@
-import 'materialize-css/dist/css/materialize.min.css'
+import 'materialize-css/dist/css/materialize.min.css';
 import React, {Component} from 'react';
 import AddToDo from './add_item';
 import List from './list';
