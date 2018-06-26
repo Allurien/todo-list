@@ -1,8 +1,8 @@
 import 'materialize-css/dist/css/materialize.min.css'
 import React, {Component} from 'react';
 import AddToDo from './add_item';
-import listData from '../data/list';
 import List from './list';
+import axios from 'axios';
 
 
 class App extends Component{
@@ -11,20 +11,38 @@ class App extends Component{
         this.state = {
             list: []
         }
+        this.baseURL = 'http://api.reactprototypes.com';
+        this.api_key = '?key=c418allu';
     }
     componentDidMount(){
         this.getListData();
     }
-    getListData(){
-        //make server call here for data
-        this.setState({
-            list: listData
-        })
+    async getListData(){
+        //.then promise method
+        // axios.get(`${this.baseURL}/todos${this.api_key}`).then(resp => {
+        //     console.log('get todos response:', resp.data.todos);
+        //     this.setState({
+        //         list: resp.data.todos
+        //     });
+        // }).catch(err =>{
+        //     console.log('get todos error:', err.message);
+        // })
+        try {
+            const resp = await axios.get(`${this.baseURL}/todos${this.api_key}`);
+            this.setState({
+                    list: resp.data.todos
+                });
+        } catch(err){
+            console.log('Get error data:', err.message);
+        }
     }
-    addItem(item){
-        this.setState({
-            list: [item, ...this.state.list]
-        })
+    async addItem(item){
+        try {
+            await axios.post(`${this.baseURL}/todos${this.api_key}`, item);
+            this.getListData();
+        } catch(err){
+            console.log('add error data:', err.message);
+        }
     }
 
     render(){
