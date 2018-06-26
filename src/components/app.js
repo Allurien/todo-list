@@ -18,22 +18,13 @@ class App extends Component{
         this.getListData();
     }
     async getListData(){
-        //.then promise method
-        // axios.get(`${this.baseURL}/todos${this.api_key}`).then(resp => {
-        //     console.log('get todos response:', resp.data.todos);
-        //     this.setState({
-        //         list: resp.data.todos
-        //     });
-        // }).catch(err =>{
-        //     console.log('get todos error:', err.message);
-        // })
         try {
             const resp = await axios.get(`${this.baseURL}/todos${this.api_key}`);
             this.setState({
                     list: resp.data.todos
                 });
         } catch(err){
-            console.log('Get error data:', err.message);
+            console.log('Get data error:', err.message);
         }
     }
     async addItem(item){
@@ -45,13 +36,17 @@ class App extends Component{
         }
     }
 
+    async deleteItem(id){
+        const resp = await axios.delete(`${this.baseURL}/todos/${id}${this.api_key}`);
+        this.getListData();
+    }
+
     render(){
-        console.log(this.state);
         return(
         <div className='container'>
             <h1 className="center">To Do List</h1>
             <AddToDo add={this.addItem.bind(this)}/>
-            <List data={this.state.list}/>
+            <List data={this.state.list} delete={this.deleteItem.bind(this)}/>
          </div>
         );
     }
